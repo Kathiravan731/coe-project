@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="480" style="background:#0f172a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <!-- Header -->
+  <text x="40" y="45" fill="#f8fafc" font-size="20" font-weight="700">Before vs. After Pilot System Performance Comparison</text>
+  <text x="40" y="70" fill="#94a3b8" font-size="13">Evaluation of 160 Seeded Home-Care Medical Monitoring Loan Returns</text>
+
+  <!-- Legend -->
+  <rect x="480" y="32" width="14" height="14" rx="3" fill="#ef4444"/>
+  <text x="500" y="44" fill="#cbd5e1" font-size="12">Manual Baseline</text>
+  <rect x="610" y="32" width="14" height="14" rx="3" fill="#3b82f6"/>
+  <text x="630" y="44" fill="#cbd5e1" font-size="12">Pilot Target</text>
+  <rect x="710" y="32" width="14" height="14" rx="3" fill="#10b981"/>
+  <text x="730" y="44" fill="#cbd5e1" font-size="12">Measured</text>
+
+  <!-- Grid lines -->
+  <line x1="60" y1="100" x2="740" y2="100" stroke="#334155" stroke-dasharray="4"/>
+  <line x1="60" y1="180" x2="740" y2="180" stroke="#334155" stroke-dasharray="4"/>
+  <line x1="60" y1="260" x2="740" y2="260" stroke="#334155" stroke-dasharray="4"/>
+  <line x1="60" y1="340" x2="740" y2="340" stroke="#334155" stroke-dasharray="4"/>
+  <line x1="60" y1="420" x2="740" y2="420" stroke="#475569" stroke-width="2"/>
+
+  <!-- Metric 1: Missing Accessory Reissue Rate (%) -->
+  <text x="140" y="445" fill="#94a3b8" font-size="12" text-anchor="middle">Missing Accessory Reissue (%)</text>
+  <!-- Baseline: 28.6% -> height = 28.6 * 8 = 228.8 -> y = 420 - 229 = 191 -->
+  <rect x="90" y="191" width="30" height="229" rx="4" fill="#ef4444"/>
+  <text x="105" y="180" fill="#f87171" font-size="11" font-weight="600" text-anchor="middle">28.6%</text>
+  <!-- Target: 1.0% -> height = 8 -> y = 412 -->
+  <rect x="125" y="412" width="30" height="8" rx="4" fill="#3b82f6"/>
+  <text x="140" y="405" fill="#60a5fa" font-size="11" font-weight="600" text-anchor="middle">1.0%</text>
+  <!-- Measured: 0.0% -> height = 2 -> y = 418 -->
+  <rect x="160" y="418" width="30" height="2" rx="2" fill="#10b981"/>
+  <text x="175" y="405" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">0.0%</text>
+
+  <!-- Metric 2: Uncleaned Reissue Rate (%) -->
+  <text x="320" y="445" fill="#94a3b8" font-size="12" text-anchor="middle">Uncleaned Reissue (%)</text>
+  <!-- Baseline: 21.4% -> height = 171 -> y = 420 - 171 = 249 -->
+  <rect x="270" y="249" width="30" height="171" rx="4" fill="#ef4444"/>
+  <text x="285" y="238" fill="#f87171" font-size="11" font-weight="600" text-anchor="middle">21.4%</text>
+  <!-- Target: 0.0% -> height = 2 -> y = 418 -->
+  <rect x="305" y="418" width="30" height="2" rx="2" fill="#3b82f6"/>
+  <text x="320" y="405" fill="#60a5fa" font-size="11" font-weight="600" text-anchor="middle">0.0%</text>
+  <!-- Measured: 0.0% -> height = 2 -> y = 418 -->
+  <rect x="340" y="418" width="30" height="2" rx="2" fill="#10b981"/>
+  <text x="355" y="405" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">0.0%</text>
+
+  <!-- Metric 3: Turnaround Time (Hours) -->
+  <text x="500" y="445" fill="#94a3b8" font-size="12" text-anchor="middle">Turnaround Time (Hrs)</text>
+  <!-- Baseline: 14.8 hrs -> height = 14.8 * 18 = 266 -> y = 420 - 266 = 154 -->
+  <rect x="450" y="154" width="30" height="266" rx="4" fill="#ef4444"/>
+  <text x="465" y="143" fill="#f87171" font-size="11" font-weight="600" text-anchor="middle">14.8h</text>
+  <!-- Target: 3.5 hrs -> height = 63 -> y = 420 - 63 = 357 -->
+  <rect x="485" y="357" width="30" height="63" rx="4" fill="#3b82f6"/>
+  <text x="500" y="347" fill="#60a5fa" font-size="11" font-weight="600" text-anchor="middle">3.5h</text>
+  <!-- Measured: 2.1 hrs -> height = 38 -> y = 420 - 38 = 382 -->
+  <rect x="520" y="382" width="30" height="38" rx="4" fill="#10b981"/>
+  <text x="535" y="372" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">2.1h</text>
+
+  <!-- Metric 4: Audit Trail Completeness (%) -->
+  <text x="670" y="445" fill="#94a3b8" font-size="12" text-anchor="middle">Audit Completeness (%)</text>
+  <!-- Baseline: 38.0% -> height = 38 * 2.8 = 106.4 -> y = 420 - 106 = 314 -->
+  <rect x="620" y="314" width="30" height="106" rx="4" fill="#ef4444"/>
+  <text x="635" y="303" fill="#f87171" font-size="11" font-weight="600" text-anchor="middle">38.0%</text>
+  <!-- Target: 100.0% -> height = 280 -> y = 140 -->
+  <rect x="655" y="140" width="30" height="280" rx="4" fill="#3b82f6"/>
+  <text x="670" y="128" fill="#60a5fa" font-size="11" font-weight="600" text-anchor="middle">100%</text>
+  <!-- Measured: 100.0% -> height = 280 -> y = 140 -->
+  <rect x="690" y="140" width="30" height="280" rx="4" fill="#10b981"/>
+  <text x="705" y="128" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">100%</text>
+</svg>

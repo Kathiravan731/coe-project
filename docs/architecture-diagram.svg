@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" width="100%" height="620" style="background:#0a0f1d; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <linearGradient id="primaryGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="purpleGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <text x="40" y="42" fill="#f8fafc" font-size="22" font-weight="800">MediLoan Component Architecture & Trust Boundaries</text>
+  <text x="40" y="66" fill="#94a3b8" font-size="13">Zero-PHI Medical Monitoring Equipment Return & Accessory Reconciliation Pipeline</text>
+
+  <!-- Trust Boundary 1: Client Environment -->
+  <rect x="30" y="90" width="260" height="490" rx="14" fill="none" stroke="#334155" stroke-dasharray="6" stroke-width="1.5"/>
+  <rect x="45" y="80" width="165" height="22" rx="4" fill="#1e293b"/>
+  <text x="52" y="95" fill="#38bdf8" font-size="11" font-weight="700">TRUST BOUNDARY 1: CLIENT</text>
+
+  <!-- Client Component Card -->
+  <rect x="45" y="120" width="230" height="440" rx="10" fill="url(#cardGrad)" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="60" y="135" width="200" height="35" rx="6" fill="url(#primaryGrad)"/>
+  <text x="160" y="157" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">Single Page Web App</text>
+  
+  <text x="65" y="195" fill="#f1f5f9" font-size="12" font-weight="600">• Role Context Selector</text>
+  <text x="75" y="215" fill="#94a3b8" font-size="11">Coordinator / Tech / Supervisor</text>
+
+  <text x="65" y="245" fill="#f1f5f9" font-size="12" font-weight="600">• Barcode / QR Scanner</text>
+  <text x="75" y="265" fill="#94a3b8" font-size="11">Sub-second input autocomplete</text>
+
+  <text x="65" y="295" fill="#f1f5f9" font-size="12" font-weight="600">• Manifest Checklist UI</text>
+  <text x="75" y="315" fill="#94a3b8" font-size="11">Present / Missing / Damaged / Photo</text>
+
+  <text x="65" y="345" fill="#f1f5f9" font-size="12" font-weight="600">• Structured Wear Rubric</text>
+  <text x="75" y="365" fill="#10b981" font-size="11">Strict Zero-PHI (No free-text notes)</text>
+
+  <text x="65" y="395" fill="#f1f5f9" font-size="12" font-weight="600">• Rule Trail Visualizer</text>
+  <text x="75" y="415" fill="#94a3b8" font-size="11">Explainable evidence breakdown</text>
+
+  <text x="65" y="445" fill="#f1f5f9" font-size="12" font-weight="600">• Human Override Gate</text>
+  <text x="75" y="465" fill="#f59e0b" font-size="11">Mandatory reason & justification</text>
+
+  <text x="65" y="495" fill="#f1f5f9" font-size="12" font-weight="600">• Live Analytics Dashboard</text>
+  <text x="75" y="515" fill="#94a3b8" font-size="11">Turnaround, override & defect trends</text>
+
+  <!-- TLS 1.3 Arrow -->
+  <line x1="275" y1="330" x2="350" y2="330" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="285" y="312" width="55" height="18" rx="3" fill="#0369a1"/>
+  <text x="312" y="325" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">HTTPS</text>
+
+  <!-- Trust Boundary 2: API Gateway & Application Server -->
+  <rect x="330" y="90" width="300" height="490" rx="14" fill="none" stroke="#334155" stroke-dasharray="6" stroke-width="1.5"/>
+  <rect x="345" y="80" width="190" height="22" rx="4" fill="#1e293b"/>
+  <text x="352" y="95" fill="#10b981" font-size="11" font-weight="700">TRUST BOUNDARY 2: APP API</text>
+
+  <rect x="345" y="120" width="270" height="440" rx="10" fill="url(#cardGrad)" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="360" y="135" width="240" height="35" rx="6" fill="url(#emeraldGrad)"/>
+  <text x="480" y="157" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">FastAPI Core Service Layer</text>
+
+  <rect x="360" y="185" width="240" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="370" y="205" fill="#38bdf8" font-size="12" font-weight="700">RBAC & Header Auth Middleware</text>
+  <text x="370" y="223" fill="#94a3b8" font-size="10.5">Validates X-User-Role / Enforces Least-Privilege</text>
+
+  <rect x="360" y="245" width="240" height="85" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="370" y="265" fill="#f59e0b" font-size="12" font-weight="700">Explainable Recommendation Engine</text>
+  <text x="370" y="283" fill="#cbd5e1" font-size="10.5">• Deterministic Multi-gate Evaluation</text>
+  <text x="370" y="300" fill="#cbd5e1" font-size="10.5">• Safe Fallback on Low History (N &lt; 5)</text>
+  <text x="370" y="317" fill="#cbd5e1" font-size="10.5">• Inspectable Rule-Trail Generator</text>
+
+  <rect x="360" y="340" width="240" height="65" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="370" y="360" fill="#818cf8" font-size="12" font-weight="700">Capacity & Scheduling Service</text>
+  <text x="370" y="378" fill="#cbd5e1" font-size="10.5">• Tracks Cleaning Bay & Tech Queue</text>
+  <text x="370" y="395" fill="#cbd5e1" font-size="10.5">• Proposes Realistic Turnaround Slot</text>
+
+  <rect x="360" y="415" width="240" height="65" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="370" y="435" fill="#38bdf8" font-size="12" font-weight="700">Human Confirmation Gate Service</text>
+  <text x="370" y="453" fill="#cbd5e1" font-size="10.5">• Mandatory Approval / Override Check</text>
+  <text x="370" y="470" fill="#cbd5e1" font-size="10.5">• Captures Typed Technical Rationale</text>
+
+  <rect x="360" y="490" width="240" height="50" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="370" y="510" fill="#10b981" font-size="12" font-weight="700">Pydantic Validation & Sanitizer</text>
+  <text x="370" y="528" fill="#94a3b8" font-size="10.5">Strict Tag Allowlist (Rejects free-text notes)</text>
+
+  <!-- DB Connection Arrow -->
+  <line x1="615" y1="330" x2="690" y2="330" stroke="#10b981" stroke-width="2"/>
+  <rect x="625" y="312" width="55" height="18" rx="3" fill="#047857"/>
+  <text x="652" y="325" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">SQL / WAL</text>
+
+  <!-- Trust Boundary 3: Secure Relational Data Layer -->
+  <rect x="670" y="90" width="260" height="490" rx="14" fill="none" stroke="#334155" stroke-dasharray="6" stroke-width="1.5"/>
+  <rect x="685" y="80" width="180" height="22" rx="4" fill="#1e293b"/>
+  <text x="692" y="95" fill="#818cf8" font-size="11" font-weight="700">TRUST BOUNDARY 3: DATA STORE</text>
+
+  <rect x="685" y="120" width="230" height="440" rx="10" fill="url(#cardGrad)" stroke="#818cf8" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="700" y="135" width="200" height="35" rx="6" fill="url(#purpleGrad)"/>
+  <text x="800" y="157" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">Relational SQLite (WAL)</text>
+
+  <rect x="700" y="185" width="200" height="90" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="710" y="205" fill="#a5b4fc" font-size="12" font-weight="700">Normalized Tables</text>
+  <text x="710" y="222" fill="#cbd5e1" font-size="10.5">• devices (Hashed serials)</text>
+  <text x="710" y="238" fill="#cbd5e1" font-size="10.5">• loans (Pseudonymous ref)</text>
+  <text x="710" y="254" fill="#cbd5e1" font-size="10.5">• return_checklists / condition</text>
+  <text x="710" y="270" fill="#cbd5e1" font-size="10.5">• capacity_slots</text>
+
+  <rect x="700" y="285" width="200" height="135" rx="6" fill="#1e293b" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="710" y="305" fill="#f87171" font-size="12" font-weight="700">Append-Only Event Store</text>
+  <text x="710" y="323" fill="#cbd5e1" font-size="10.5">• events (Immutable audit log)</text>
+  <text x="710" y="340" fill="#cbd5e1" font-size="10.5">• SQLite DB Triggers:</text>
+  <rect x="710" y="348" width="180" height="38" rx="4" fill="#0f172a" stroke="#475569"/>
+  <text x="715" y="363" fill="#fca5a5" font-family="'JetBrains Mono', monospace" font-size="9">PREVENT_UPDATE TRIGGER</text>
+  <text x="715" y="378" fill="#fca5a5" font-family="'JetBrains Mono', monospace" font-size="9">PREVENT_DELETE TRIGGER</text>
+  <text x="710" y="405" fill="#34d399" font-size="10.5">🔒 Hardware/DB Tamper-Evident</text>
+
+  <rect x="700" y="430" width="200" height="110" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="710" y="450" fill="#38bdf8" font-size="12" font-weight="700">Zero-PHI Guarantee</text>
+  <text x="710" y="468" fill="#cbd5e1" font-size="10.5">• No Patient Names/DOB</text>
+  <text x="710" y="484" fill="#cbd5e1" font-size="10.5">• No Free-Text Medical Notes</text>
+  <text x="710" y="500" fill="#cbd5e1" font-size="10.5">• Opaque Photo Blobs Only</text>
+  <text x="710" y="516" fill="#cbd5e1" font-size="10.5">• Redacted Actor/Ref IDs</text>
+
+</svg>

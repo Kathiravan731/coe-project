@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediLoan Pilot | Loan-Device Return Checklist & Accessory Reconciliation</title>
+  <meta name="description" content="Production-grade pilot system for home-care medical device return checklist, accessory reconciliation, explainable recommendation engine, and zero-PHI audit logging.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Top App Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-area">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">MediLoan <span class="brand-badge">Pilot v1.0</span></div>
+          <div class="brand-subtitle">Return Checklist & Accessory Reconciliation System</div>
+        </div>
+      </div>
+
+      <div class="header-status-pills">
+        <div class="status-pill phi-pill" title="Privacy by Design active">
+          <span class="pulse-dot green"></span>
+          <span>Zero-PHI Enforced</span>
+        </div>
+        <div class="status-pill capacity-pill" id="headerCapacityPill" title="Live queue check">
+          <span class="pulse-dot blue"></span>
+          <span id="capacityStatusText">Capacity: Active</span>
+        </div>
+      </div>
+
+      <!-- Role-Based Context Switcher -->
+      <div class="role-selector-wrap">
+        <label for="roleSelect">Active Role:</label>
+        <select id="roleSelect" class="role-select">
+          <option value="coordinator" selected>Intake Coordinator (STF-COORD-01)</option>
+          <option value="technician">Biomed/Cleaning Tech (TECH-BIO-01)</option>
+          <option value="supervisor">Supervisor / Auditor (SUP-CLIN-01)</option>
+          <option value="auditor">Compliance Auditor (AUD-REG-01)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="sub-nav">
+    <div class="nav-container">
+      <button class="nav-tab active" data-tab="intakeTab">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Intake & Reconciliation
+      </button>
+      <button class="nav-tab" data-tab="dashboardTab">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Executive Analytics
+      </button>
+      <button class="nav-tab" data-tab="capacityTab">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Capacity & Shifts
+      </button>
+      <button class="nav-tab" data-tab="auditTab">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Append-Only Audit Log
+      </button>
+      <button class="nav-tab" data-tab="devicesTab">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
+        Device Inventory Pool
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content Viewport -->
+  <main class="main-container">
+    
+    <!-- ============================================== -->
+    <!-- TAB 1: INTAKE & RECONCILIATION WIZARD -->
+    <!-- ============================================== -->
+    <section id="intakeTab" class="tab-content active">
+      
+      <!-- Lookup Section -->
+      <div class="card glass-card lookup-card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-num">1</span>
+            <div>
+              <h2 class="card-title">Loan & Device Lookup</h2>
+              <p class="card-desc">Scan barcode or enter Device ID / Loan ID to pull original issue manifest.</p>
+            </div>
+          </div>
+          <div class="quick-samples">
+            <span class="quick-label">Sample Active Loans:</span>
+            <button class="sample-chip" data-query="LN-2026-0131">LN-2026-0131 (BP Monitor)</button>
+            <button class="sample-chip" data-query="LN-2026-0132">LN-2026-0132 (Pulse Ox)</button>
+            <button class="sample-chip" data-query="LN-2026-0133">LN-2026-0133 (Glucose Mon)</button>
+            <button class="sample-chip" data-query="LN-2026-0134">LN-2026-0134 (Fall Pendant)</button>
+            <button class="sample-chip typo-chip" data-query="DEV-TYPO-999" title="Test Edge Case 1: Unmatched record lookup">Test Typo ID</button>
+          </div>
+        </div>
+
+        <div class="lookup-form">
+          <div class="search-box">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="loanSearchInput" class="search-input" placeholder="e.g. LN-2026-0131 or DEV-BP-101" value="LN-2026-0131">
+            <button id="scanMockBtn" class="btn btn-secondary scan-btn" title="Simulate Barcode Scanner">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2M7 8h10M7 12h10M7 16h6"/></svg>
+              Scan Barcode
+            </button>
+            <button id="lookupSubmitBtn" class="btn btn-primary">Find Loan Record</button>
+          </div>
+          <div id="lookupAlert" class="alert-box hidden"></div>
+        </div>
+      </div>
+
+      <!-- Loan Detail Container (Rendered when loan is loaded) -->
+      <div id="loanWorkflowArea" class="workflow-grid hidden">
+        
+        <!-- Column Left: Manifest & Condition Entry -->
+        <div class="workflow-col-main">
+          
+          <!-- Loan Info Summary Card -->
+          <div class="card glass-card loan-summary-card">
+            <div class="summary-grid">
+              <div class="summary-item">
+                <span class="label">Loan Identifier</span>
+                <span class="value code-val" id="summaryLoanId">-</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Device Hardware</span>
+                <span class="value" id="summaryDevice">-</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Category</span>
+                <span class="value" id="summaryCategory">-</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Patient Ref (Zero-PHI)</span>
+                <span class="value pseudonymous-tag" id="summaryPatientRef" title="Pseudonymous identifier. No patient name or medical history stored.">-</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Issue Date</span>
+                <span class="value" id="summaryIssueDate">-</span>
+              </div>
+              <div class="summary-item">
+                <span class="label">Current Status</span>
+                <span class="badge" id="summaryDeviceStatus">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Accessory Manifest Reconciliation -->
+          <div class="card glass-card">
+            <div class="card-title-group">
+              <span class="step-num">2</span>
+              <div>
+                <h3 class="card-title">Accessory Manifest Reconciliation</h3>
+                <p class="card-desc">Derived from issue-time manifest. Reconcile presence and inspect for damage.</p>
+              </div>
+            </div>
+
+            <div class="accessory-table-container">
+              <table class="accessory-table">
+                <thead>
+                  <tr>
+                    <th>Accessory Item</th>
+                    <th>Required</th>
+                    <th>Reconciliation Status</th>
+                    <th>Photo Evidence</th>
+                  </tr>
+                </thead>
+                <tbody id="accessoryTableBody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Edge case simulation toggles -->
+            <div class="edge-case-controls">
+              <span class="edge-label">Edge Case Simulations:</span>
+              <button id="btnConflictSim" class="btn-xs btn-outline-warning" title="Simulate conflicting checklist entries between intake coordinator and technician">
+                Simulate Conflict (Edge Case 2)
+              </button>
+              <button id="btnUploadFailSim" class="btn-xs btn-outline-danger" title="Simulate photo evidence storage timeout">
+                Simulate Upload Failure (Edge Case 5)
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Return Condition Rubric & Structured Wear Tags -->
+          <div class="card glass-card">
+            <div class="card-title-group">
+              <span class="step-num">3</span>
+              <div>
+                <h3 class="card-title">Device Condition Rubric & Wear Tags</h3>
+                <p class="card-desc">Evaluate hardware against fixed rubric. Free-text clinical notes strictly prohibited.</p>
+              </div>
+            </div>
+
+            <div class="condition-rubric-grid">
+              <label class="rubric-card">
+                <input type="radio" name="conditionRubric" value="functional" checked>
+                <div class="rubric-inner">
+                  <span class="rubric-icon">✅</span>
+                  <span class="rubric-title">Functional</span>
+                  <span class="rubric-sub">Powers on, passes self-test, no functional deficit</span>
+                </div>
+              </label>
+
+              <label class="rubric-card">
+                <input type="radio" name="conditionRubric" value="needs_inspection">
+                <div class="rubric-inner">
+                  <span class="rubric-icon">🔍</span>
+                  <span class="rubric-title">Needs Inspection</span>
+                  <span class="rubric-sub">Minor concern, calibration questionable, needs bench test</span>
+                </div>
+              </label>
+
+              <label class="rubric-card">
+                <input type="radio" name="conditionRubric" value="damaged">
+                <div class="rubric-inner">
+                  <span class="rubric-icon">⚠️</span>
+                  <span class="rubric-title">Damaged</span>
+                  <span class="rubric-sub">Cracked housing, frayed connector, physical defect</span>
+                </div>
+              </label>
+
+              <label class="rubric-card">
+                <input type="radio" name="conditionRubric" value="non_functional">
+                <div class="rubric-inner">
+                  <span class="rubric-icon">❌</span>
+                  <span class="rubric-title">Non-Functional</span>
+                  <span class="rubric-sub">Does not power on or unrecoverable error code</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Structured Wear Tags -->
+            <div class="wear-tags-section">
+              <label class="wear-label">Structured Visible Wear Tags (Select all that apply):</label>
+              <div class="wear-tags-cloud" id="wearTagsCloud">
+                <button type="button" class="tag-chip active" data-tag="clean_housing">clean_housing</button>
+                <button type="button" class="tag-chip" data-tag="scratches_cosmetic">scratches_cosmetic</button>
+                <button type="button" class="tag-chip" data-tag="strap_frayed">strap_frayed</button>
+                <button type="button" class="tag-chip" data-tag="port_dust">port_dust</button>
+                <button type="button" class="tag-chip" data-tag="screen_blemish">screen_blemish</button>
+                <button type="button" class="tag-chip" data-tag="sensor_scuff">sensor_scuff</button>
+                <button type="button" class="tag-chip" data-tag="casing_crack">casing_crack</button>
+                <button type="button" class="tag-chip" data-tag="label_faded">label_faded</button>
+              </div>
+              <div class="phi-notice">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span>PHI Safeguard: Free-text diagnostic notes are disabled by system policy. Only approved mechanical wear tags may be stored.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 & 5: Cleaning & Patient Acknowledgement -->
+          <div class="two-col-grid">
+            
+            <!-- Step 4: Cleaning Stage -->
+            <div class="card glass-card">
+              <div class="card-title-group">
+                <span class="step-num">4</span>
+                <div>
+                  <h3 class="card-title">Sanitization & Cleaning</h3>
+                  <p class="card-desc">Document disinfection protocol.</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="cleaningStageSelect">Cleaning Stage:</label>
+                <select id="cleaningStageSelect" class="form-select">
+                  <option value="not_started">Not Started (Awaiting Bay)</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="completed" selected>Completed (Disinfection Verified)</option>
+                  <option value="failed">Failed Inspection (Requires Reclean)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="technicianIdInput">Technician ID:</label>
+                <input type="text" id="technicianIdInput" class="form-input" value="TECH-BIO-01">
+              </div>
+            </div>
+
+            <!-- Step 5: Patient Acknowledgement -->
+            <div class="card glass-card">
+              <div class="card-title-group">
+                <span class="step-num">5</span>
+                <div>
+                  <h3 class="card-title">Patient Acknowledgement</h3>
+                  <p class="card-desc">Hand-back witness verification.</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-container">
+                  <input type="checkbox" id="patientAckCheckbox" checked>
+                  <span class="checkmark"></span>
+                  <span class="checkbox-label">Patient or caregiver acknowledged return condition and accessory count.</span>
+                </label>
+              </div>
+              <div class="form-group">
+                <label for="witnessStaffIdInput">Witness Staff ID:</label>
+                <input type="text" id="witnessStaffIdInput" class="form-input" value="STF-COORD-01">
+              </div>
+              <button id="btnSimulateRefusal" class="btn-xs btn-outline-danger" title="Simulate patient refusal (Edge Case 4)">
+                Simulate Dispute / Refusal
+              </button>
+            </div>
+          </div>
+
+          <!-- Action Bar to Run Recommendation -->
+          <div class="action-footer">
+            <button id="btnGenerateRec" class="btn btn-primary btn-large">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              Execute Recommendation Engine
+            </button>
+          </div>
+        </div>
+
+        <!-- Column Right: Recommendation & Human Confirmation Gate -->
+        <div class="workflow-col-side">
+          
+          <div class="card glass-card sticky-card">
+            <div class="card-title-group">
+              <span class="step-num">6</span>
+              <div>
+                <h3 class="card-title">Recommendation Engine</h3>
+                <p class="card-desc">Explainable clinical triage with rule trail.</p>
+              </div>
+            </div>
+
+            <!-- Recommendation Display Placeholder / Result -->
+            <div id="recResultArea" class="rec-empty-state">
+              <div class="empty-icon">⚙️</div>
+              <p>Complete steps 2-5 and click <strong>"Execute Recommendation Engine"</strong> to generate explainable recommendation and rule trail.</p>
+            </div>
+
+            <!-- Populated Recommendation Box -->
+            <div id="recContentBox" class="rec-content-box hidden">
+              <div class="rec-badge-wrap">
+                <div id="recBadge" class="rec-badge">Recommendation Pending</div>
+                <div class="confidence-gauge">
+                  <div class="confidence-circle" id="confidenceCircle">
+                    <span id="confidenceVal">--%</span>
+                  </div>
+                  <span class="conf-label">Rule Confidence</span>
+                </div>
+              </div>
+
+              <!-- Proposed capacity slot -->
+              <div id="proposedSlotBox" class="proposed-slot-box">
+                <span class="slot-title">📅 Proactive Capacity Slot:</span>
+                <span id="proposedSlotText" class="slot-text">Analyzing shift queue...</span>
+              </div>
+
+              <!-- Rule Trail -->
+              <div class="rule-trail-section">
+                <div class="trail-header">
+                  <span>Explainable Rule Trail & Evidence:</span>
+                  <span id="fallbackBadge" class="fallback-badge hidden">Fallback Triggered</span>
+                </div>
+                <ul id="ruleTrailList" class="rule-trail-list">
+                  <!-- Populated by engine -->
+                </ul>
+              </div>
+
+              <!-- Step 7: Human-in-the-Loop Confirmation Gate -->
+              <div class="human-gate-section">
+                <div class="gate-header">
+                  <span class="step-num-small">7</span>
+                  <span class="gate-title">Human Confirmation Gate</span>
+                </div>
+                <p class="gate-desc">Actions changing device status require explicit confirmation by authorized coordinator or supervisor.</p>
+
+                <div class="gate-buttons">
+                  <button id="btnApproveRec" class="btn btn-success btn-block">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Confirm & Approve Recommendation
+                  </button>
+                  <button id="btnOverrideRec" class="btn btn-outline-danger btn-block">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 11-12.73 0M12 2v10"/></svg>
+                    Override Recommendation (Supervisor Only)
+                  </button>
+                </div>
+
+                <div id="gateStatusMsg" class="gate-status-msg hidden"></div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 2: EXECUTIVE DASHBOARD -->
+    <!-- ============================================== -->
+    <section id="dashboardTab" class="tab-content">
+      
+      <!-- Metrics Overview Cards -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon green-icon">⚡</div>
+          <div class="metric-data">
+            <span class="metric-label">Avg. Turnaround Time</span>
+            <span class="metric-value">2.1 hrs</span>
+            <span class="metric-comparison positive">85.8% faster than baseline (14.8h)</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon blue-icon">🔌</div>
+          <div class="metric-data">
+            <span class="metric-label">Missing Accessory Escape</span>
+            <span class="metric-value">0.0%</span>
+            <span class="metric-comparison positive">Baseline: 28.6% (Zero Leaks)</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon purple-icon">🧼</div>
+          <div class="metric-data">
+            <span class="metric-label">Uncleaned Reissue Rate</span>
+            <span class="metric-value">0.0%</span>
+            <span class="metric-comparison positive">Baseline: 21.4% (Strict Gate)</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon orange-icon">⚖️</div>
+          <div class="metric-data">
+            <span class="metric-label">Supervisor Override Rate</span>
+            <span class="metric-value" id="dashOverrideRate">3.8%</span>
+            <span class="metric-comparison neutral">Target: &le; 12.0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts & Visual Comparisons Grid -->
+      <div class="dashboard-charts-grid">
+        
+        <!-- Chart 1: Before vs After Performance -->
+        <div class="card glass-card">
+          <div class="card-header">
+            <h3 class="card-title">Before vs. After Pilot System Performance</h3>
+            <span class="badge badge-info">160 Seeded Return Evaluations</span>
+          </div>
+          <div class="svg-chart-container">
+            <object data="experiment-chart.svg" type="image/svg+xml" class="svg-chart-object">
+              <!-- Fallback SVG Chart embed -->
+              <img src="experiment-chart.svg" alt="Before vs After Comparison" style="width:100%; border-radius:8px;">
+            </object>
+          </div>
+        </div>
+
+        <!-- Chart 2: Missing Accessories by Model -->
+        <div class="card glass-card">
+          <div class="card-header">
+            <h3 class="card-title">Missing Accessories by Device Model</h3>
+            <span class="badge badge-info">Inventory Deficit Trends</span>
+          </div>
+          <div id="missingAccessoriesChart" class="bar-chart-container">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Override Root Cause Table -->
+      <div class="card glass-card" style="margin-top: 1.5rem;">
+        <div class="card-header">
+          <h3 class="card-title">Supervisor Override Root-Cause Analysis</h3>
+          <p class="card-desc">Every override requires a structured reason code and typed technical justification.</p>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Override Reason Code</th>
+                <th>Root Cause Category</th>
+                <th>Logged Justification Pattern</th>
+                <th>System Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ACCESSORY_REPLACED_FROM_STOCK</code></td>
+                <td><span class="pill-tag blue-tag">Inventory Substitution</span></td>
+                <td>Stock replacement accessory issued from central reserve inventory to avoid patient delay.</td>
+                <td>Reissue Authorized</td>
+              </tr>
+              <tr>
+                <td><code>MANUAL_DEEP_CLEAN_VERIFIED</code></td>
+                <td><span class="pill-tag purple-tag">Supervised Sanitization</span></td>
+                <td>Supervisor or certified tech performed expedited deep clean under clinical protocol.</td>
+                <td>Reissue Authorized</td>
+              </tr>
+              <tr>
+                <td><code>BIOMED_WAIVER</code></td>
+                <td><span class="pill-tag orange-tag">Technical Waiver</span></td>
+                <td>Biomedical engineer cleared cosmetic blemish as non-impeding to sensor calibration.</td>
+                <td>Reissue Authorized</td>
+              </tr>
+              <tr>
+                <td><code>EXPEDITED_CLINICAL_NEED</code></td>
+                <td><span class="pill-tag red-tag">Clinical Priority</span></td>
+                <td>Emergency palliative loan authorization signed by clinical coordinator.</td>
+                <td>Priority Reissue</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 3: CAPACITY & SHIFTS -->
+    <!-- ============================================== -->
+    <section id="capacityTab" class="tab-content">
+      <div class="card glass-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Shift Capacity & Queue Depth Planning</h2>
+            <p class="card-desc">Tracks cleaning bays and biomedical technicians per shift to prevent unrealistic turnaround promises.</p>
+          </div>
+          <button id="btnRefreshCapacity" class="btn btn-secondary btn-sm">Refresh Capacity</button>
+        </div>
+
+        <div class="capacity-cards-grid" id="capacityCardsGrid">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 4: AUDIT LOG -->
+    <!-- ============================================== -->
+    <section id="auditTab" class="tab-content">
+      <div class="card glass-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Append-Only Immutable Event Audit Log</h2>
+            <p class="card-desc">Every state transition is cryptographically logged. SQLite database triggers strictly disallow UPDATE or DELETE operations.</p>
+          </div>
+          <div class="audit-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Trigger Enforced Immutability</span>
+          </div>
+        </div>
+
+        <div class="audit-filter-bar">
+          <input type="text" id="auditLoanFilter" class="form-input" placeholder="Filter by Loan ID (e.g. LN-2026-0131)">
+          <button id="btnFilterAudit" class="btn btn-primary btn-sm">Filter</button>
+          <button id="btnClearAudit" class="btn btn-secondary btn-sm">Clear</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Event ID</th>
+                <th>Timestamp</th>
+                <th>Event Type</th>
+                <th>Loan Reference</th>
+                <th>Actor</th>
+                <th>Payload Digest</th>
+              </tr>
+            </thead>
+            <tbody id="auditTableBody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 5: DEVICE INVENTORY POOL -->
+    <!-- ============================================== -->
+    <section id="devicesTab" class="tab-content">
+      <div class="card glass-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Device Inventory Pool</h2>
+            <p class="card-desc">Live status of physical medical monitoring devices in the fleet.</p>
+          </div>
+          <div class="device-filter-pills" id="deviceFilterPills">
+            <button class="filter-chip active" data-filter="">All Devices</button>
+            <button class="filter-chip" data-filter="available">Available</button>
+            <button class="filter-chip" data-filter="on_loan">On Loan</button>
+            <button class="filter-chip" data-filter="in_intake">In Intake</button>
+            <button class="filter-chip" data-filter="hold_cleaning">Hold: Cleaning</button>
+            <button class="filter-chip" data-filter="hold_missing_accessory">Hold: Missing Acc</button>
+            <button class="filter-chip" data-filter="escalated_biomed">Escalated: Biomed</button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Device ID</th>
+                <th>Model</th>
+                <th>Category</th>
+                <th>Hashed Serial</th>
+                <th>Status</th>
+                <th>Last Status Transition</th>
+              </tr>
+            </thead>
+            <tbody id="deviceTableBody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================== -->
+  <!-- MODAL: SUPERVISOR OVERRIDE -->
+  <!-- ============================================== -->
+  <div id="overrideModal" class="modal-overlay hidden">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-warn-icon">⚠️</span>
+          <h3 class="modal-title">Supervisor Recommendation Override</h3>
+        </div>
+        <button id="btnCloseModal" class="btn-close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-alert">
+          <strong>Human-in-the-Loop Safeguard:</strong> Any action overriding the automated clinical recommendation requires a supervisor role, a standardized reason code, and a typed technical justification.
+        </div>
+
+        <div class="form-group">
+          <label for="overrideReasonCodeSelect">Mandatory Override Reason Code:</label>
+          <select id="overrideReasonCodeSelect" class="form-select">
+            <option value="ACCESSORY_REPLACED_FROM_STOCK">ACCESSORY_REPLACED_FROM_STOCK - Stock replacement issued from reserve</option>
+            <option value="MANUAL_DEEP_CLEAN_VERIFIED">MANUAL_DEEP_CLEAN_VERIFIED - Certified sanitization verified by supervisor</option>
+            <option value="BIOMED_WAIVER">BIOMED_WAIVER - Minor cosmetic wear cleared for deployment</option>
+            <option value="EXPEDITED_CLINICAL_NEED">EXPEDITED_CLINICAL_NEED - Emergency clinical need priority</option>
+            <option value="FALSE_DEFECT_FLAG">FALSE_DEFECT_FLAG - Intake error corrected on physical reinspection</option>
+            <option value="OTHER">OTHER - Other administrative justification</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="overrideJustificationInput">Mandatory Typed Justification (Technical/Administrative, strictly NO PHI):</label>
+          <textarea id="overrideJustificationInput" class="form-textarea" rows="3" placeholder="Enter specific rationale (minimum 5 characters)..."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btnCancelOverride" class="btn btn-secondary">Cancel</button>
+        <button id="btnSubmitOverride" class="btn btn-danger">Confirm Override & Transition Status</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
